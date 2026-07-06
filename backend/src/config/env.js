@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const env = {
-  port: parseInt(process.env.PORT, 10) || 3000,
+  port: parseInt(process.env.PORT, 10) || 3050,
   nodeEnv: process.env.NODE_ENV || 'development',
   mongoUri: process.env.MONGO_URI,
   redisUrl: process.env.REDIS_URL,
