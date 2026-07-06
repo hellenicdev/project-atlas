@@ -15,7 +15,7 @@ export default class FilesScreen extends Component {
           <input type="file" id="file-input" multiple>
           <button id="file-upload-btn" class="btn-primary">Upload</button>
         </div>
-        <div class="file-list">
+        <div class="file-list" id="file-list">
           ${this.files.length === 0 ? '<p class="empty-state">No files uploaded</p>' : ''}
           ${this.files.map(file => `
             <div class="file-item">
@@ -29,35 +29,54 @@ export default class FilesScreen extends Component {
     `;
   }
 
-  async afterMount() {
+  afterMount() {
+    this.attachEvents();
+    this.loadFiles();
+  }
+
+  afterUpdate() {
+    this.attachEvents();
+  }
+
+  attachEvents() {
     const uploadBtn = this.$('#file-upload-btn');
     const fileInput = this.$('#file-input');
+    if (uploadBtn && fileInput) {
+      this.on(uploadBtn, 'click', async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
 
-    this.on(uploadBtn, 'click', async () => {
-      const file = fileInput.files[0];
-      if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
 
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const token = api.token;
-        const res = await fetch(`${api.baseUrl}/api/files/upload`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.success) {
-          fileInput.value = '';
-          await this.loadFiles();
+        try {
+          const token = api.token;
+          const res = await fetch(`${api.baseUrl}/api/files/upload`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: formData,
+          });
+          const data = await res.json();
+          if (data.success) {
+            fileInput.value = '';
+            await this.loadFiles();
+          }
+        } catch {
+          alert('Upload failed');
         }
-      } catch (err) {
-        alert('Upload failed');
-      }
-    });
+      });
+    }
 
-    await this.loadFiles();
+    this.$$('.btn-delete').forEach(btn => {
+      this.on(btn, 'click', async () => {
+        try {
+          await api.delete(`/api/files/${btn.dataset.id}`);
+          await this.loadFiles();
+        } catch {
+          alert('Delete failed');
+        }
+      });
+    });
   }
 
   async loadFiles() {
