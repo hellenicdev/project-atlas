@@ -24,7 +24,11 @@ const app = express();
 app.use(requestId);
 app.use(requestLogger);
 app.use(helmet());
-app.use(cors({ origin: env.frontendUrl, credentials: true }));
+const corsOrigin = new URL(env.frontendUrl).origin;
+app.use(cors({
+  origin: [env.frontendUrl, corsOrigin],
+  credentials: true,
+}));
 app.use(cookieParser());
 app.use(sanitizeInput);
 app.use(mongoSanitize());
