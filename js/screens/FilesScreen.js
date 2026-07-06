@@ -62,13 +62,13 @@ export default class FilesScreen extends Component {
 
   async loadFiles() {
     try {
-      const res = await api.get('/api/files/folder/root');
+      const res = await api.get('/api/files');
       if (res.success) {
         this.files = res.data.files || [];
         this.update();
       }
     } catch {
-      // folder endpoint needs a real folder ID; skip for now
+      // no files yet
     }
   }
 }

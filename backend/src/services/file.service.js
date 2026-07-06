@@ -58,3 +58,9 @@ export const getFolderContents = async (folderId, userId) => {
 
   return { folder, files, folders };
 };
+
+export const getUserFiles = async (userId) => {
+  const files = await File.find({ ownerId: userId, folderId: null, isTrashed: false }).sort({ createdAt: -1 });
+  const folders = await Folder.find({ ownerId: userId, parentId: null });
+  return { files, folders };
+};

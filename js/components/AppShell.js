@@ -1,6 +1,7 @@
 import Component from '../component.js';
 import store from '../store.js';
 import api from '../api.js';
+import router from '../router.js';
 
 export default class AppShell extends Component {
   render() {
@@ -63,8 +64,12 @@ export default class AppShell extends Component {
     }
 
     store.subscribe('auth', (auth) => {
+      const hadAuth = !!this.element?.querySelector('.sidebar');
       this.update();
       if (auth) this.setupAuthListeners();
+      if (hadAuth !== !!auth) {
+        router.init(this.$('#screen-content'));
+      }
     });
   }
 

@@ -26,3 +26,8 @@ export const getFolder = asyncHandler(async (req, res) => {
   const result = await fileService.getFolderContents(req.params.id, req.user.id);
   successResponse(res, { data: result });
 });
+
+export const getUserFiles = asyncHandler(async (req, res) => {
+  const result = await fileService.getUserFiles(req.user.id);
+  successResponse(res, { data: result });
+});
