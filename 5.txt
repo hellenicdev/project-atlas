@@ -1,0 +1,374 @@
+================================================================================
+FILE: 42_FULL_API_SURFACE_MAP.txt
+================================================================================
+
+YOU MUST IMPLEMENT ALL ENDPOINTS BELOW COMPLETELY.
+
+This file defines the final API surface of the system.
+
+----------------------------------------
+AUTH MODULE
+----------------------------------------
+
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/logout
+POST   /api/auth/refresh
+GET    /api/auth/me
+POST   /api/auth/verify-email
+POST   /api/auth/resend-verification
+POST   /api/auth/forgot-password
+POST   /api/auth/reset-password
+
+----------------------------------------
+USER MODULE
+----------------------------------------
+
+GET    /api/users
+GET    /api/users/:id
+PATCH  /api/users/:id
+DELETE /api/users/:id
+POST   /api/users/follow/:id
+POST   /api/users/unfollow/:id
+GET    /api/users/:id/activity
+
+----------------------------------------
+POST MODULE
+----------------------------------------
+
+GET    /api/posts
+POST   /api/posts
+GET    /api/posts/:id
+DELETE /api/posts/:id
+POST   /api/posts/like/:id
+POST   /api/posts/unlike/:id
+POST   /api/posts/comment/:id
+DELETE /api/posts/comment/:commentId
+
+----------------------------------------
+CHAT MODULE
+----------------------------------------
+
+GET    /api/chats
+POST   /api/chats
+GET    /api/chats/:id/messages
+POST   /api/chats/:id/messages
+DELETE /api/chats/:id/messages/:messageId
+
+----------------------------------------
+FILES MODULE
+----------------------------------------
+
+POST   /api/files/upload
+GET    /api/files/:id
+DELETE /api/files/:id
+POST   /api/files/folder
+GET    /api/files/folder/:id
+
+----------------------------------------
+AI MODULE
+----------------------------------------
+
+POST   /api/ai/chat
+POST   /api/ai/summarize
+POST   /api/ai/translate
+POST   /api/ai/ocr
+POST   /api/ai/analyze-file
+
+----------------------------------------
+NOTIFICATIONS MODULE
+----------------------------------------
+
+GET    /api/notifications
+POST   /api/notifications/read
+POST   /api/notifications/read-all
+
+----------------------------------------
+ADMIN MODULE
+----------------------------------------
+
+GET    /api/admin/users
+POST   /api/admin/ban-user
+POST   /api/admin/unban-user
+GET    /api/admin/logs
+GET    /api/admin/stats
+
+================================================================================
+FILE: 43_UI_SCREEN_ARCHITECTURE.txt
+================================================================================
+
+YOU MUST DESIGN THE FRONTEND AS A SCREEN SYSTEM.
+
+----------------------------------------
+CORE SCREENS
+----------------------------------------
+
+1. AUTH SCREENS
+- Login Screen
+- Register Screen
+- Forgot Password Screen
+
+2. MAIN APP SHELL
+- Sidebar Navigation
+- Top Bar
+- Global Search
+- Notification Panel
+
+3. SOCIAL SCREENS
+- Feed Screen
+- Post Detail Screen
+- Profile Screen
+
+4. CHAT SCREENS
+- Chat List Screen
+- Chat Window Screen
+
+5. FILE SCREENS
+- File Manager Screen
+- File Viewer Screen
+
+6. AI SCREENS
+- AI Chat Screen
+- AI Tools Dashboard
+
+7. ADMIN SCREENS
+- Admin Dashboard
+- User Management Screen
+
+RULE:
+Every screen must be a composition of reusable components.
+
+================================================================================
+FILE: 44_DATABASE_INDEXING_MAP.txt
+================================================================================
+
+YOU MUST APPLY THESE INDEXES:
+
+USERS:
+- email (unique)
+- username
+- createdAt
+
+POSTS:
+- authorId
+- createdAt
+- tags (text index)
+
+MESSAGES:
+- chatId
+- createdAt
+
+FILES:
+- ownerId
+- folderId
+
+NOTIFICATIONS:
+- userId
+- read
+
+RULE:
+Every frequently queried field MUST be indexed.
+
+================================================================================
+FILE: 45_SECURITY_HARDENING_MATRIX.txt
+================================================================================
+
+YOU MUST PROTECT AGAINST:
+
+----------------------------------------
+1. AUTH ATTACKS
+----------------------------------------
+- brute force login
+- credential stuffing
+- token theft
+
+MITIGATION:
+- rate limiting
+- account lockout
+- refresh token rotation
+
+----------------------------------------
+2. INJECTION ATTACKS
+----------------------------------------
+- NoSQL injection
+- XSS
+- HTML injection
+
+MITIGATION:
+- input sanitization
+- strict schema validation
+
+----------------------------------------
+3. FILE ATTACKS
+----------------------------------------
+- malicious uploads
+- oversized files
+
+MITIGATION:
+- mime validation
+- file size limits
+- virus-safe extensions only
+
+----------------------------------------
+4. NETWORK ATTACKS
+----------------------------------------
+- DDoS simulation protection
+- request throttling
+
+================================================================================
+FILE: 46_LOAD_SCALING_ARCHITECTURE.txt
+================================================================================
+
+YOU MUST DESIGN SYSTEM FOR SCALING:
+
+----------------------------------------
+BACKEND SCALING
+----------------------------------------
+
+- stateless Node.js servers
+- horizontal scaling support
+- load balancing via Render
+
+----------------------------------------
+DATABASE SCALING
+----------------------------------------
+
+- MongoDB indexes
+- read replicas (if needed)
+- query optimization
+
+----------------------------------------
+REALTIME SCALING
+----------------------------------------
+
+- Socket.IO rooms isolation
+- event throttling
+- avoid global broadcasts
+
+----------------------------------------
+CACHING STRATEGY
+----------------------------------------
+
+- Redis for hot data
+- CDN for static assets
+- browser cache for UI
+
+================================================================================
+FILE: 47_TESTING_MATRIX.txt
+================================================================================
+
+YOU MUST IMPLEMENT TESTING FOR:
+
+----------------------------------------
+UNIT TESTS
+----------------------------------------
+- services
+- utilities
+- validators
+
+----------------------------------------
+INTEGRATION TESTS
+----------------------------------------
+- auth flow
+- chat system
+- file upload
+- AI responses
+
+----------------------------------------
+END-TO-END TESTS
+----------------------------------------
+- login → post → comment → notification flow
+- chat → message → read receipt flow
+
+RULE:
+No feature is complete without tests.
+
+================================================================================
+FILE: 48_PRODUCTION_READINESS_CHECKLIST.txt
+================================================================================
+
+BEFORE DEPLOYMENT YOU MUST VERIFY:
+
+✓ Authentication fully working
+✓ Authorization enforced
+✓ Rate limiting active
+✓ Database indexes applied
+✓ Redis caching active
+✓ Socket.IO stable
+✓ File uploads secure
+✓ AI fallback working
+✓ Logging enabled
+✓ Error handling complete
+✓ API documented
+✓ Frontend responsive
+✓ PWA working
+✓ Offline mode tested
+✓ Performance optimized
+✓ Security audit passed
+
+================================================================================
+FILE: 49_FINAL_OPENCODE_EXECUTION_PROTOCOL.txt
+================================================================================
+
+YOU MUST FOLLOW THIS EXECUTION ORDER:
+
+STEP 1:
+Initialize backend structure
+
+STEP 2:
+Setup database + Redis
+
+STEP 3:
+Implement authentication system
+
+STEP 4:
+Implement user system
+
+STEP 5:
+Implement social system
+
+STEP 6:
+Implement chat system
+
+STEP 7:
+Implement file system
+
+STEP 8:
+Implement AI system
+
+STEP 9:
+Implement notifications
+
+STEP 10:
+Implement admin system
+
+STEP 11:
+Build frontend screens
+
+STEP 12:
+Connect frontend to backend
+
+STEP 13:
+Enable real-time system
+
+STEP 14:
+Enable PWA + offline mode
+
+STEP 15:
+Performance optimization
+
+STEP 16:
+Security hardening
+
+STEP 17:
+Testing pass
+
+STEP 18:
+Deployment to production
+
+RULE:
+Do not skip steps. Each step depends on the previous one.
+
+================================================================================
+END OF PHASE 5 - COMPLETE SYSTEM BLUEPRINT
+================================================================================

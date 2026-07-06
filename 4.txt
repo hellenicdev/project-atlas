@@ -1,0 +1,350 @@
+================================================================================
+FILE: 32_FRONTEND_RENDERING_ENGINE.txt
+================================================================================
+
+FRONTEND ENGINE DESIGN (NO FRAMEWORKS)
+
+You will build a custom rendering system similar to a lightweight framework.
+
+CORE IDEA:
+
+You will treat UI as a reactive state-driven system.
+
+COMPONENT MODEL:
+
+Every component must follow:
+
+class Component {
+  constructor(props) {}
+  state = {}
+  render() {}
+  setState() {}
+  mount() {}
+  unmount() {}
+}
+
+RULES:
+
+- No direct DOM manipulation outside components
+- All DOM updates must go through render() logic
+- State changes trigger re-render
+- Use event delegation instead of direct listeners where possible
+
+COMPONENT LIFECYCLE:
+
+1. constructor
+2. mount
+3. render
+4. update
+5. unmount
+
+RENDER FLOW:
+
+state change → diff calculation → DOM update → re-render affected node
+
+================================================================================
+FILE: 33_STATE_REACTIVITY_ENGINE.txt
+================================================================================
+
+REACTIVE STATE SYSTEM:
+
+You will implement a custom observer system.
+
+CORE RULE:
+
+State is reactive and event-driven.
+
+IMPLEMENTATION CONCEPT:
+
+- store global state object
+- wrap state in Proxy
+- detect changes automatically
+- emit state:update events
+
+EXAMPLE FLOW:
+
+user updates state
+→ proxy detects change
+→ emits event
+→ UI listens
+→ UI updates only affected components
+
+STATE MODULES:
+
+- authState
+- uiState
+- chatState
+- notificationState
+
+RULE:
+Never mutate state directly.
+
+================================================================================
+FILE: 34_OFFLINE_FIRST_ARCHITECTURE.txt
+================================================================================
+
+OFFLINE SYSTEM DESIGN:
+
+You will implement offline-first behavior.
+
+STORAGE:
+
+- IndexedDB for structured data
+- Cache API for assets
+- localStorage ONLY for simple flags
+
+FEATURES:
+
+- offline post creation queue
+- offline message queue
+- sync engine when online
+- conflict resolution strategy
+
+SYNC FLOW:
+
+1. User performs action offline
+2. Action stored in queue
+3. Network restored
+4. Sync engine processes queue
+5. Server confirms changes
+6. UI updates
+
+RULE:
+No data loss is allowed during offline mode.
+
+================================================================================
+FILE: 35_PWA_ARCHITECTURE.txt
+================================================================================
+
+PROGRESSIVE WEB APP SYSTEM:
+
+You will implement full PWA support.
+
+SERVICE WORKER MUST HANDLE:
+
+- caching static assets
+- offline fallback page
+- API request caching
+- background sync
+
+FEATURES:
+
+- installable app
+- app manifest
+- push notifications
+- offline mode
+- fast startup
+
+CACHE STRATEGIES:
+
+- cache-first (static assets)
+- network-first (API data)
+- stale-while-revalidate (feeds)
+
+================================================================================
+FILE: 36_SEARCH_ENGINE_DESIGN.txt
+================================================================================
+
+SEARCH SYSTEM:
+
+You will implement a hybrid search engine.
+
+DATA SOURCES:
+
+- users
+- posts
+- messages
+- files
+- projects
+
+SEARCH FEATURES:
+
+- full-text search
+- fuzzy matching
+- autocomplete
+- filters
+- ranking system
+
+IMPLEMENTATION:
+
+Option A:
+- MongoDB Atlas Search
+
+Option B:
+- custom search index in Node.js
+
+INDEXING RULE:
+
+Every new/updated entity must update search index immediately.
+
+================================================================================
+FILE: 37_REDIS_CACHING_STRATEGY.txt
+================================================================================
+
+CACHING SYSTEM:
+
+You will use Redis for performance optimization.
+
+CACHE RULES:
+
+- cache user profiles
+- cache feeds
+- cache chat lists
+- cache AI responses (short TTL)
+
+KEY FORMAT:
+
+user:{id}
+feed:{userId}
+chat:{chatId}
+ai:{queryHash}
+
+TTL RULES:
+
+- user data: 10 min
+- feed: 30 sec - 2 min
+- AI: 1 hour
+- notifications: real-time (no cache)
+
+RULE:
+Cache invalidation is mandatory on update.
+
+================================================================================
+FILE: 38_REQUEST_LIFECYCLE_ENGINE.txt
+================================================================================
+
+FULL REQUEST FLOW:
+
+You will enforce a strict request lifecycle.
+
+FLOW:
+
+1. Client request sent
+2. Request ID attached
+3. Logging middleware triggered
+4. Security middleware executed
+5. Authentication checked
+6. Authorization verified
+7. Validation applied
+8. Controller invoked
+9. Service executed
+10. Repository query executed
+11. DB response returned
+12. Response formatted
+13. Logs recorded
+14. Response sent
+
+RULE:
+Any missing step = architecture violation.
+
+================================================================================
+FILE: 39_OBSERVABILITY_SYSTEM.txt
+================================================================================
+
+OBSERVABILITY ENGINE:
+
+You will implement system monitoring.
+
+METRICS:
+
+- API latency
+- error rates
+- active users
+- socket connections
+- DB query time
+
+LOGGING:
+
+- structured logs (JSON)
+- correlation via requestId
+
+ALERTING (conceptual):
+
+- high error rate
+- slow response spikes
+- DB overload
+
+TOOLS (free tier compatible):
+
+- Winston logs
+- Render logs
+- optional: Sentry
+
+================================================================================
+FILE: 40_DEPLOYMENT_TOPOLOGY.txt
+================================================================================
+
+PRODUCTION DEPLOYMENT DESIGN:
+
+FRONTEND:
+- GitHub Pages
+- CDN caching layer
+
+BACKEND:
+- Render (Node.js service)
+
+DATABASE:
+- MongoDB Atlas cluster
+
+CACHE:
+- Upstash Redis
+
+FILE STORAGE:
+- Cloudinary
+
+FLOW:
+
+Client → GitHub Pages → Render API → MongoDB/Redis/Cloudinary
+
+SCALING RULE:
+
+Backend must remain stateless.
+
+All session data stored in:
+- JWT
+- Redis
+- Database
+
+================================================================================
+FILE: 41_PLUGIN_ARCHITECTURE.txt
+================================================================================
+
+PLUGIN SYSTEM:
+
+You will design system extensibility.
+
+CORE IDEA:
+
+Features can be added as plugins without modifying core system.
+
+PLUGIN STRUCTURE:
+
+/plugins
+  /chatPlugin
+  /aiPlugin
+  /analyticsPlugin
+
+PLUGIN RULES:
+
+- must register routes
+- must register events
+- must register services
+
+PLUGIN API:
+
+registerPlugin({
+  name,
+  routes,
+  events,
+  services
+})
+
+BENEFIT:
+
+- scalable system
+- modular feature expansion
+- independent development possible
+
+================================================================================
+END OF PHASE 4
+================================================================================

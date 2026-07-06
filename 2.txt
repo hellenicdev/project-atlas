@@ -1,0 +1,388 @@
+================================================================================
+FILE: 14_API_SPECIFICATION.txt
+================================================================================
+
+API DESIGN RULES:
+
+You will design REST APIs with consistent structure.
+
+BASE RULE:
+All endpoints must follow:
+/api/{module}/{action}
+
+All responses must follow:
+
+{
+  "success": true,
+  "message": "",
+  "data": {},
+  "error": null,
+  "timestamp": "",
+  "requestId": ""
+}
+
+----------------------------------------
+AUTH API
+----------------------------------------
+
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/logout
+POST   /api/auth/refresh
+POST   /api/auth/verify-email
+POST   /api/auth/forgot-password
+POST   /api/auth/reset-password
+GET    /api/auth/me
+
+----------------------------------------
+USER API
+----------------------------------------
+
+GET    /api/users/:id
+GET    /api/users
+PATCH  /api/users/:id
+DELETE /api/users/:id
+POST   /api/users/follow/:id
+POST   /api/users/unfollow/:id
+
+----------------------------------------
+POST API
+----------------------------------------
+
+GET    /api/posts
+POST   /api/posts
+GET    /api/posts/:id
+DELETE /api/posts/:id
+POST   /api/posts/like/:id
+POST   /api/posts/comment/:id
+
+----------------------------------------
+CHAT API
+----------------------------------------
+
+GET    /api/chats
+POST   /api/chats
+GET    /api/chats/:id/messages
+POST   /api/chats/:id/messages
+
+----------------------------------------
+FILES API
+----------------------------------------
+
+POST   /api/files/upload
+GET    /api/files/:id
+DELETE /api/files/:id
+
+----------------------------------------
+AI API
+----------------------------------------
+
+POST   /api/ai/chat
+POST   /api/ai/summarize
+POST   /api/ai/translate
+POST   /api/ai/ocr
+
+----------------------------------------
+NOTIFICATION API
+----------------------------------------
+
+GET    /api/notifications
+POST   /api/notifications/read
+DELETE /api/notifications/:id
+
+================================================================================
+FILE: 15_SOCKET_EVENTS.txt
+================================================================================
+
+REALTIME SYSTEM (Socket.IO)
+
+You will implement event-driven architecture.
+
+----------------------------------------
+CONNECTION EVENTS
+----------------------------------------
+
+connection
+disconnect
+reconnect
+
+----------------------------------------
+AUTH EVENTS
+----------------------------------------
+
+auth:join
+auth:leave
+
+----------------------------------------
+CHAT EVENTS
+----------------------------------------
+
+chat:message
+chat:typing
+chat:stop_typing
+chat:read
+chat:delete
+
+Payload example:
+{
+  "chatId": "",
+  "senderId": "",
+  "message": "",
+  "timestamp": ""
+}
+
+----------------------------------------
+NOTIFICATION EVENTS
+----------------------------------------
+
+notification:new
+notification:read
+
+----------------------------------------
+SOCIAL EVENTS
+----------------------------------------
+
+post:new
+post:like
+post:comment
+post:delete
+
+----------------------------------------
+PRESENCE EVENTS
+----------------------------------------
+
+user:online
+user:offline
+user:active
+
+================================================================================
+FILE: 16_DATABASE_SCHEMAS.txt
+================================================================================
+
+USERS COLLECTION
+
+{
+  _id,
+  name,
+  email,
+  passwordHash,
+  avatar,
+  bio,
+  role: "user" | "admin",
+  followers: [],
+  following: [],
+  createdAt,
+  updatedAt,
+  lastLogin,
+  isVerified,
+  devices: []
+}
+
+----------------------------------------
+
+POSTS COLLECTION
+
+{
+  _id,
+  authorId,
+  content,
+  media: [],
+  likes: [],
+  comments: [],
+  tags: [],
+  createdAt,
+  updatedAt
+}
+
+----------------------------------------
+
+MESSAGES COLLECTION
+
+{
+  _id,
+  chatId,
+  senderId,
+  content,
+  type: "text" | "image" | "file",
+  readBy: [],
+  createdAt
+}
+
+----------------------------------------
+
+FILES COLLECTION
+
+{
+  _id,
+  ownerId,
+  url,
+  type,
+  size,
+  folderId,
+  createdAt
+}
+
+----------------------------------------
+
+NOTIFICATIONS COLLECTION
+
+{
+  _id,
+  userId,
+  type,
+  message,
+  read,
+  createdAt
+}
+
+================================================================================
+FILE: 17_FRONTEND_COMPONENT_SYSTEM.txt
+================================================================================
+
+You will build a component-based architecture using Web Components.
+
+----------------------------------------
+CORE COMPONENTS
+----------------------------------------
+
+<AppShell>
+<SidebarMenu>
+<TopNavbar>
+<UserAvatar>
+<NotificationBell>
+
+<PostCard>
+<CommentBox>
+<LikeButton>
+
+<ChatWindow>
+<MessageBubble>
+<TypingIndicator>
+
+<FileUploader>
+<FilePreview>
+
+<AIChatBox>
+<PromptInput>
+
+<AnalyticsCard>
+<ChartWidget>
+
+----------------------------------------
+RULES
+
+- Every component must be reusable
+- Every component must be self-contained
+- No global DOM manipulation outside app shell
+- Use Shadow DOM where isolation is required
+- Use events for communication
+
+================================================================================
+FILE: 18_STATE_MANAGEMENT.txt
+================================================================================
+
+STATE SYSTEM:
+
+You will implement a global event-based store.
+
+CORE RULES:
+
+- No external frameworks
+- Use EventEmitter pattern
+- State must be immutable
+
+STATE MODULES:
+
+- authState
+- userState
+- chatState
+- notificationState
+- uiState
+
+EXAMPLE:
+
+store.set("user", userData)
+store.get("user")
+
+Events:
+
+state:update
+state:sync
+
+================================================================================
+FILE: 19_SECURITY_EXPANSION.txt
+================================================================================
+
+ADVANCED SECURITY RULES:
+
+- Sanitize all HTML inputs
+- Escape outputs before rendering
+- Validate file uploads (mime + size)
+- Block executable uploads
+- Enforce rate limits per IP and user
+- Detect brute force login attempts
+- Lock accounts after repeated failures
+- Log all sensitive actions
+
+================================================================================
+FILE: 20_PERFORMANCE_ARCHITECTURE.txt
+================================================================================
+
+PERFORMANCE SYSTEM:
+
+Frontend:
+- Lazy load all routes
+- Compress images before upload
+- Cache static assets
+- Use IndexedDB for offline data
+
+Backend:
+- Use Redis caching for frequent queries
+- Paginate all list endpoints
+- Index all query-heavy fields
+- Avoid N+1 queries
+
+Realtime:
+- Throttle socket events
+- Batch updates when possible
+
+================================================================================
+FILE: 21_BACKGROUND_JOBS.txt
+================================================================================
+
+QUEUE SYSTEM:
+
+You will implement background jobs for:
+
+- Email sending
+- AI processing
+- File compression
+- Thumbnail generation
+- Notification dispatch
+- Analytics aggregation
+
+Use:
+- BullMQ (Redis-based)
+
+Jobs must be retryable and idempotent.
+
+================================================================================
+FILE: 22_CI_CD.txt
+================================================================================
+
+DEPLOYMENT PIPELINE:
+
+Frontend:
+- GitHub Pages auto deploy from main branch
+
+Backend:
+- Render auto deploy from main branch
+
+Rules:
+- All commits must pass lint checks
+- Tests must pass before deployment
+- Environment variables must never be committed
+
+================================================================================
+END OF PHASE 2
+================================================================================

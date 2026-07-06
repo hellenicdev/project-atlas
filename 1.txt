@@ -1,0 +1,438 @@
+================================================================================
+PROJECT ATLAS - FULL SPECIFICATION BUNDLE
+================================================================================
+
+INSTRUCTION:
+You will split this file into multiple .txt files using the markers:
+===== FILE: filename.txt =====
+
+Each section is self-contained and must be saved as its own file.
+
+================================================================================
+FILE: 00_MASTER_SPECIFICATION.txt
+================================================================================
+
+PROJECT ATLAS
+
+You will build an enterprise-grade unified platform combining:
+
+- Social network
+- Real-time chat system
+- Collaboration suite
+- Cloud storage system
+- AI assistant system
+- Task/project management system
+- Analytics platform
+- Admin dashboard
+- Developer APIs
+
+All features must share:
+authentication, database, notifications, search, analytics, logging, and settings.
+
+The system must behave like a unified operating system in the browser.
+
+TECH STACK:
+
+Frontend:
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES2023+)
+- Web Components
+- Service Workers
+- IndexedDB
+- Canvas API
+- SVG
+- PWA support
+
+Backend:
+- Node.js
+- Express.js
+- Socket.IO
+- JWT authentication
+- bcrypt
+- multer
+- sharp
+- helmet
+- cors
+- rate limiting
+
+Database:
+- MongoDB Atlas
+- Mongoose
+
+Storage:
+- Cloudinary
+
+Cache:
+- Upstash Redis
+
+Deployment:
+- Frontend: GitHub Pages
+- Backend: Render
+
+AI:
+- Gemini API / Groq / Ollama fallback
+
+You must design everything to be modular, scalable, secure, and production-ready.
+
+================================================================================
+FILE: 01_ARCHITECTURE.txt
+================================================================================
+
+ARCHITECTURE MODEL:
+
+You will use layered architecture:
+
+Client → API → Controllers → Services → Repositories → Database
+
+RULES:
+
+Controllers:
+- Handle requests only
+- Validate input
+- Call services
+- Return response
+
+Services:
+- Contain business logic only
+
+Repositories:
+- Handle database operations only
+
+Models:
+- Define schema structure
+
+Middleware:
+- Authentication
+- Authorization
+- Logging
+- Rate limiting
+- Validation
+
+UTILITIES:
+- Reusable helper functions only
+
+REALTIME:
+- Socket.IO server must manage:
+  - chat
+  - notifications
+  - presence
+  - live updates
+
+BACKGROUND SYSTEM:
+- Cron jobs
+- Queues for emails, uploads, AI processing
+
+================================================================================
+FILE: 02_FRONTEND.txt
+================================================================================
+
+FRONTEND RULES:
+
+You will NOT use frameworks.
+
+You will build everything using:
+
+- HTML
+- CSS
+- Vanilla JavaScript
+- Web Components
+
+FEATURE SYSTEM:
+
+- Component-based UI system
+- Reusable UI modules
+- Global state manager
+- Event bus system
+
+PAGES:
+
+- Login
+- Register
+- Dashboard
+- Social feed
+- Chat
+- Files
+- Notes
+- Projects
+- Calendar
+- Admin panel
+- Settings
+
+UI REQUIREMENTS:
+
+- Fully responsive
+- Dark mode + light mode
+- Accessibility compliant
+- Keyboard navigation
+- ARIA support
+
+PERFORMANCE:
+
+- Lazy loading
+- Code splitting (manual)
+- Image optimization
+- Caching via service workers
+
+================================================================================
+FILE: 03_BACKEND.txt
+================================================================================
+
+BACKEND RULES:
+
+You will build a modular Express.js server.
+
+CORE MODULES:
+
+- Auth module
+- User module
+- Social module
+- Chat module
+- File module
+- AI module
+- Admin module
+- Analytics module
+- Notification module
+- Search module
+
+API STYLE:
+
+RESTful endpoints only.
+
+Example:
+GET /api/users
+POST /api/auth/login
+
+REALTIME:
+Socket.IO must handle:
+- messaging
+- typing indicators
+- presence
+- notifications
+
+VALIDATION:
+All inputs must be validated using middleware.
+
+ERROR FORMAT:
+All responses must follow structured JSON format.
+
+================================================================================
+FILE: 04_DATABASE.txt
+================================================================================
+
+DATABASE: MongoDB Atlas
+
+RULES:
+
+- Use Mongoose schemas
+- Use timestamps in every schema
+- Use indexes for frequently queried fields
+- Use ObjectId references for relations
+
+CORE COLLECTIONS:
+
+- users
+- posts
+- comments
+- messages
+- files
+- notifications
+- projects
+- tasks
+- events
+- logs
+
+ADVANCED FEATURES:
+
+- Aggregation pipelines
+- Text search indexes
+- Geospatial indexing
+- TTL collections for sessions
+
+================================================================================
+FILE: 05_AUTHENTICATION.txt
+================================================================================
+
+AUTH SYSTEM:
+
+You will implement:
+
+- JWT authentication
+- Refresh tokens
+- Email verification
+- Password reset
+- OAuth (Google, GitHub)
+- Session tracking
+- Device tracking
+
+SECURITY RULES:
+
+- Hash passwords using bcrypt
+- Never store plain passwords
+- Use HTTP-only cookies for refresh tokens
+- Rate limit login attempts
+- Block suspicious IPs
+
+================================================================================
+FILE: 06_SOCIAL.txt
+================================================================================
+
+SOCIAL SYSTEM:
+
+You will implement:
+
+- Posts
+- Comments
+- Likes
+- Shares
+- Followers
+- Feeds
+- Mentions
+- Hashtags
+
+REALTIME UPDATES:
+
+- New posts
+- Likes
+- Comments
+- Notifications
+
+================================================================================
+FILE: 07_CHAT.txt
+================================================================================
+
+CHAT SYSTEM:
+
+Socket.IO based real-time system.
+
+FEATURES:
+
+- Private messaging
+- Group chats
+- Typing indicators
+- Read receipts
+- File sharing
+- Emoji support
+
+ADVANCED:
+
+- Message persistence in MongoDB
+- Message search
+- Message editing/deletion
+
+================================================================================
+FILE: 08_FILES.txt
+================================================================================
+
+FILE SYSTEM:
+
+You will implement:
+
+- Upload system (multer)
+- Cloud storage (Cloudinary)
+- Image compression (sharp)
+- File preview system
+
+FEATURES:
+
+- Upload images, videos, PDFs
+- Folder system
+- Sharing links
+- File versioning
+- Trash system
+
+================================================================================
+FILE: 09_AI.txt
+================================================================================
+
+AI MODULE:
+
+You will integrate:
+
+- Chat assistant
+- Text summarization
+- Translation
+- OCR
+- Code helper
+- Resume analyzer
+
+PROVIDERS:
+
+- Gemini API (primary)
+- Groq (fast inference)
+- Ollama (offline fallback)
+
+================================================================================
+FILE: 10_ADMIN.txt
+================================================================================
+
+ADMIN PANEL:
+
+FEATURES:
+
+- User management
+- Role management
+- System logs
+- Analytics dashboard
+- Content moderation
+- Ban system
+
+================================================================================
+FILE: 11_ANALYTICS.txt
+================================================================================
+
+ANALYTICS SYSTEM:
+
+Track:
+
+- Active users
+- Page views
+- API usage
+- Feature usage
+- Error rates
+
+VISUALS:
+
+- Charts
+- Graphs
+- Real-time dashboards
+
+================================================================================
+FILE: 12_SECURITY.txt
+================================================================================
+
+SECURITY REQUIREMENTS:
+
+- Helmet middleware
+- CORS protection
+- Input sanitization
+- XSS prevention
+- NoSQL injection prevention
+- Rate limiting
+- Secure cookies
+
+================================================================================
+FILE: 13_DEPLOYMENT.txt
+================================================================================
+
+DEPLOYMENT:
+
+Frontend:
+- GitHub Pages
+
+Backend:
+- Render
+
+DATABASE:
+- MongoDB Atlas
+
+ENV VARIABLES:
+
+- JWT_SECRET
+- MONGO_URI
+- CLOUDINARY_KEYS
+- EMAIL_API_KEY
+
+================================================================================
+END OF BUNDLE
+================================================================================
