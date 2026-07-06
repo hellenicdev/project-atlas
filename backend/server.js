@@ -7,8 +7,9 @@ import logger from './src/utils/logger.js';
 
 const server = http.createServer(app);
 
+const corsOrigin = new URL(env.frontendUrl).origin;
 const io = new SocketIOServer(server, {
-  cors: { origin: env.frontendUrl, credentials: true },
+  cors: { origin: [env.frontendUrl, corsOrigin], credentials: true },
   pingTimeout: 60000,
   pingInterval: 25000,
 });
