@@ -29,8 +29,17 @@ export default class AIScreen extends Component {
   }
 
   afterMount() {
+    this.attachEvents();
+  }
+
+  afterUpdate() {
+    this.attachEvents();
+  }
+
+  attachEvents() {
     const sendBtn = this.$('#ai-send');
     const input = this.$('#ai-prompt');
+    if (!sendBtn || !input) return;
 
     this.on(sendBtn, 'click', async () => {
       const message = input.value;
@@ -46,7 +55,7 @@ export default class AIScreen extends Component {
           this.messages.push({ role: 'assistant', content: res.data.response });
           this.update();
         }
-      } catch (err) {
+      } catch {
         this.messages.push({ role: 'assistant', content: 'Sorry, I encountered an error.' });
         this.update();
       }

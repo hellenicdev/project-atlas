@@ -47,51 +47,38 @@ export default class ChatScreen extends Component {
     `;
   }
 
-  async afterMount() {
-    await this.loadChats();
-    this.on(this.$('#new-chat-btn'), 'click', async () => {
-      const userId = prompt('Enter user ID to chat with:');
-      if (userId) {
-        try {
-          await api.post('/api/chats', { participants: [userId] });
-          await this.loadChats();
-        } catch (err) {
-          alert(err.message);
+  afterMount() {
+    this.attachEvents();
+    this.loadChats();
+  }
+
+  afterUpdate() {
+    this.attachEvents();
+  }
+
+  attachEvents() {
+    const newChatBtn = this.$('#new-chat-btn');
+    if (newChatBtn) {
+      this.on(newChatBtn, 'click', async () => {
+        const userId = prompt('Enter user ID to chat with:');
+        if (userId) {
+          try {
+            await api.post('/api/chats', { participants: [userId] });
+            await this.loadChats();
+          } catch (err) {
+            alert(err.message);
+          }
         }
-      }
-    });
+      });
+    }
 
     this.$$('.chat-item').forEach(item => {
       this.on(item, 'click', async () => {
         this.activeChat = item.dataset.id;
         await this.loadMessages();
-        this.update();
       });
     });
-  }
 
-  async loadChats() {
-    try {
-      const res = await api.get('/api/chats');
-      if (res.success) this.chats = res.data;
-      this.update();
-    } catch (err) {
-      console.error('Failed to load chats', err);
-    }
-  }
-
-  async loadMessages() {
-    try {
-      const res = await api.get(`/api/chats/${this.activeChat}/messages`);
-      if (res.success) this.messages = res.data.messages || [];
-      this.update();
-      this.afterUpdate();
-    } catch (err) {
-      console.error('Failed to load messages', err);
-    }
-  }
-
-  afterUpdate() {
     const sendBtn = this.$('#msg-send');
     const input = this.$('#msg-input');
     if (sendBtn && input) {
@@ -110,6 +97,26 @@ export default class ChatScreen extends Component {
       this.on(input, 'keydown', (e) => {
         if (e.key === 'Enter') sendBtn.click();
       });
+    }
+  }
+
+  async loadChats() {
+    try {
+      const res = await api.get('/api/chats');
+      if (res.success) this.chats = res.data;
+      this.update();
+    } catch (err) {
+      console.error('Failed to load chats', err);
+    }
+  }
+
+  async loadMessages() {
+    try {
+      const res = await api.get(`/api/chats/${this.activeChat}/messages`);
+      if (res.success) this.messages = res.data.messages || [];
+      this.update();
+    } catch (err) {
+      console.error('Failed to load messages', err);
     }
   }
 }

@@ -1,5 +1,6 @@
 import Component from '../component.js';
 import api from '../api.js';
+import store from '../store.js';
 
 export default class FeedScreen extends Component {
   constructor() {
@@ -8,6 +9,7 @@ export default class FeedScreen extends Component {
   }
 
   render() {
+    const userId = store.get('user')?._id;
     return `
       <div class="feed-screen">
         <h2>Social Feed</h2>
@@ -25,7 +27,7 @@ export default class FeedScreen extends Component {
               </div>
               <p class="post-content">${post.content}</p>
               <div class="post-actions">
-                <button class="like-btn ${post.likes?.includes(store.get('user')?._id) ? 'liked' : ''}" data-id="${post._id}">
+                <button class="like-btn ${post.likes?.includes(userId) ? 'liked' : ''}" data-id="${post._id}">
                   ♥ ${post.likes?.length || 0}
                 </button>
                 <button class="comment-toggle" data-id="${post._id}">
@@ -46,18 +48,42 @@ export default class FeedScreen extends Component {
     `;
   }
 
-  async afterMount() {
-    await this.loadPosts();
-    this.on(this.$('#post-submit'), 'click', async () => {
-      const content = this.$('#post-content').value;
-      if (!content) return;
-      try {
-        await api.post('/api/posts', { content });
-        this.$('#post-content').value = '';
-        await this.loadPosts();
-      } catch (err) {
-        alert(err.message);
-      }
+  afterMount() {
+    this.attachEvents();
+    this.loadPosts();
+  }
+
+  afterUpdate() {
+    this.attachEvents();
+  }
+
+  attachEvents() {
+    const submitBtn = this.$('#post-submit');
+    if (submitBtn) {
+      this.on(submitBtn, 'click', async () => {
+        const content = this.$('#post-content').value;
+        if (!content) return;
+        try {
+          await api.post('/api/posts', { content });
+          this.$('#post-content').value = '';
+          await this.loadPosts();
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    }
+
+    this.$$('.like-btn').forEach(btn => {
+      this.on(btn, 'click', async () => {
+        const id = btn.dataset.id;
+        const isLiked = btn.classList.contains('liked');
+        try {
+          await api.post(`/api/posts/${isLiked ? 'unlike' : 'like'}/${id}`);
+          await this.loadPosts();
+        } catch (err) {
+          console.error('Like failed', err);
+        }
+      });
     });
   }
 
@@ -67,15 +93,6 @@ export default class FeedScreen extends Component {
       if (res.success) {
         this.posts = res.data.posts;
         this.update();
-        // attach listeners for like buttons
-        this.$$('.like-btn').forEach(btn => {
-          this.on(btn, 'click', async () => {
-            const id = btn.dataset.id;
-            const isLiked = btn.classList.contains('liked');
-            await api.post(`/api/posts/${isLiked ? 'unlike' : 'like'}/${id}`);
-            await this.loadPosts();
-          });
-        });
       }
     } catch (err) {
       console.error('Failed to load posts', err);

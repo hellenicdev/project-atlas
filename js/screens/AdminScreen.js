@@ -48,14 +48,26 @@ export default class AdminScreen extends Component {
     `;
   }
 
-  async afterMount() {
-    await this.loadData();
+  afterMount() {
+    this.attachEvents();
+    this.loadData();
+  }
+
+  afterUpdate() {
+    this.attachEvents();
+  }
+
+  attachEvents() {
     this.$$('[data-action]').forEach(btn => {
       this.on(btn, 'click', async () => {
         const userId = btn.dataset.id;
         const action = btn.dataset.action;
-        await api.post(`/api/admin/${action}-user`, { userId });
-        await this.loadData();
+        try {
+          await api.post(`/api/admin/${action}-user`, { userId });
+          await this.loadData();
+        } catch (err) {
+          alert(err.message);
+        }
       });
     });
   }
