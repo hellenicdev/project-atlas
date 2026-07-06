@@ -2,7 +2,7 @@
 // Change this to your Render backend URL after deployment
 const BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3050'
-  : 'https://atlas-backend.onrender.com';
+  : 'https://project-atlas-44f6.onrender.com';
 
 class ApiClient {
   constructor(baseUrl) {
