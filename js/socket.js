@@ -1,10 +1,9 @@
 // Socket.IO client
 import api from './api.js';
 import store from './store.js';
+import { getBackendUrl } from './config/runtime.js';
 
-const SOCKET_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3050'
-  : 'https://project-atlas-44f6.onrender.com';
+const SOCKET_URL = getBackendUrl();
 
 class SocketClient {
   constructor() {

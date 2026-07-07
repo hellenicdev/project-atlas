@@ -25,5 +25,7 @@ services:
         sync: false
       - key: RESEND_API_KEY
         sync: false
+      - key: TURNSTILE_SECRET_KEY
+        sync: false
       - key: FRONTEND_URL
         value: https://hellenicdev.github.io/project-atlas

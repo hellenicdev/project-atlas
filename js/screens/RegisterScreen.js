@@ -1,5 +1,6 @@
 import Component from '../component.js';
 import api from '../api.js';
+import { getTurnstileSiteKey } from '../config/runtime.js';
 
 export default class RegisterScreen extends Component {
   render() {
@@ -21,6 +22,7 @@ export default class RegisterScreen extends Component {
               <label for="password">Password</label>
               <input type="password" id="password" name="password" placeholder="Min 8 characters" required minlength="8">
             </div>
+            <div id="register-turnstile" class="turnstile-container"></div>
             <button type="submit" class="btn-primary">Register</button>
           </form>
           <p class="auth-link">Already have an account? <a href="#/login">Sign in</a></p>
@@ -31,6 +33,24 @@ export default class RegisterScreen extends Component {
 
   afterMount() {
     const form = this.$('#register-form');
+    const turnstileContainer = this.$('#register-turnstile');
+    this.turnstileToken = '';
+
+    if (window.turnstile && turnstileContainer) {
+      window.turnstile.render(turnstileContainer, {
+        sitekey: getTurnstileSiteKey(),
+        callback: (token) => {
+          this.turnstileToken = token;
+        },
+        'error-callback': () => {
+          this.turnstileToken = '';
+        },
+        'expired-callback': () => {
+          this.turnstileToken = '';
+        },
+      });
+    }
+
     this.on(form, 'submit', async (e) => {
       e.preventDefault();
       try {
@@ -38,6 +58,7 @@ export default class RegisterScreen extends Component {
           name: form.name.value,
           email: form.email.value,
           password: form.password.value,
+          turnstileToken: this.turnstileToken,
         });
         if (res.success) {
           alert('Registration successful! Please check your email to verify.');

@@ -8,7 +8,40 @@ import logger from '../utils/logger.js';
 import { AppError } from '../utils/response.js';
 import { sendVerificationEmail, sendPasswordResetEmail } from './email.service.js';
 
-export const createUser = async ({ name, email, password }) => {
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+const verifyTurnstileToken = async (token) => {
+  if (!env.turnstileSecretKey) {
+    return;
+  }
+
+  if (!token) {
+    throw new AppError('Turnstile verification is required', 400, 'TURNSTILE_REQUIRED');
+  }
+
+  const body = new URLSearchParams({
+    secret: env.turnstileSecretKey,
+    response: token,
+  });
+
+  const response = await fetch(TURNSTILE_VERIFY_URL, {
+    method: 'POST',
+    body,
+  });
+
+  if (!response.ok) {
+    throw new AppError('Turnstile verification failed', 502, 'TURNSTILE_VERIFY_FAILED');
+  }
+
+  const result = await response.json();
+  if (!result.success) {
+    throw new AppError('Turnstile verification failed', 400, 'TURNSTILE_INVALID');
+  }
+};
+
+export const createUser = async ({ name, email, password, turnstileToken }) => {
+  await verifyTurnstileToken(turnstileToken);
+
   const existing = await User.findOne({ email });
   if (existing) {
     throw new AppError('Email already registered', 409, 'AUTH_EMAIL_EXISTS');
@@ -24,7 +57,9 @@ export const createUser = async ({ name, email, password }) => {
   return { user: sanitizeUser(user), verificationToken };
 };
 
-export const authenticateUser = async ({ email, password }) => {
+export const authenticateUser = async ({ email, password, turnstileToken }) => {
+  await verifyTurnstileToken(turnstileToken);
+
   const user = await User.findOne({ email }).select('+passwordHash');
   if (!user) {
     throw new AppError('Invalid email or password', 401, 'AUTH_INVALID_CREDENTIALS');

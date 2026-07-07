@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const env = {
   port: parseInt(process.env.PORT, 10) || 3050,
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -17,7 +19,8 @@ const env = {
   groqApiKey: process.env.GROQ_API_KEY,
   geminiApiKey: process.env.GEMINI_API_KEY,
   resendApiKey: process.env.RESEND_API_KEY,
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+  turnstileSecretKey: process.env.TURNSTILE_SECRET_KEY || null,
+  frontendUrl: process.env.FRONTEND_URL || (isProduction ? 'https://hellenicdev.github.io/project-atlas' : 'http://localhost:3000'),
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 900000,
     max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
