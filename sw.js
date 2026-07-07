@@ -1,6 +1,6 @@
 // Project Atlas Service Worker
 
-const CACHE = 'atlas-v1';
+const CACHE = 'atlas-v2';
 const STATIC_ASSETS = [
   '/project-atlas/',
   '/project-atlas/index.html',
