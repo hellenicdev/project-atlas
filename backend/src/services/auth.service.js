@@ -35,7 +35,10 @@ const verifyTurnstileToken = async (token) => {
 
   const result = await response.json();
   if (!result.success) {
-    throw new AppError('Turnstile verification failed', 400, 'TURNSTILE_INVALID');
+    const errorCodes = Array.isArray(result['error-codes']) && result['error-codes'].length > 0
+      ? ` (${result['error-codes'].join(', ')})`
+      : '';
+    throw new AppError(`Turnstile verification failed${errorCodes}`, 400, 'TURNSTILE_INVALID');
   }
 };
 

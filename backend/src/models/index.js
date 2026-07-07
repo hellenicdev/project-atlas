@@ -5,3 +5,5 @@ export { default as Message } from './Message.js';
 export { default as File } from './File.js';
 export { default as Folder } from './Folder.js';
 export { default as Notification } from './Notification.js';
+export { default as Note } from './Note.js';
+export { default as CalendarEvent } from './CalendarEvent.js';

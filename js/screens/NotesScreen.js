@@ -23,10 +23,10 @@ export default class NotesScreen extends Component {
         <div class="notes-sidebar">
           <div class="notes-sidebar-header">
             <div>
-              <h3>Notes</h3>
-              <small>${visibleNotes.length} shown · ${pinnedCount} pinned</small>
+              <h3>Your Notes</h3>
+              <small>Private to your account · ${visibleNotes.length} shown · ${pinnedCount} pinned</small>
             </div>
-            <button id="new-note-btn" class="btn-sm btn-primary">+ New</button>
+            <button id="new-note-btn" class="btn-sm btn-primary">+ Note</button>
           </div>
           <div class="notes-search-wrap">
             <input type="text" id="notes-search" placeholder="Search..." value="${escapeHtml(this.searchQuery)}">
@@ -69,7 +69,7 @@ export default class NotesScreen extends Component {
                 <button id="save-note-btn" class="btn-sm btn-primary">Save</button>
               </div>
             </div>
-          ` : '<div class="empty-state" style="flex:1;display:flex;align-items:center;justify-content:center"><div><div class="empty-icon">📝</div><p>Select or create a note</p></div></div>'}
+          ` : '<div class="empty-state" style="flex:1;display:flex;align-items:center;justify-content:center"><div><div class="empty-icon">📝</div><p>Select or create a private note</p></div></div>'}
         </div>
       </div>
     `;

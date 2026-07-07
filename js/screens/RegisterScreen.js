@@ -35,9 +35,10 @@ export default class RegisterScreen extends Component {
     const form = this.$('#register-form');
     const turnstileContainer = this.$('#register-turnstile');
     this.turnstileToken = '';
+    this.turnstileWidgetId = null;
 
     if (window.turnstile && turnstileContainer) {
-      window.turnstile.render(turnstileContainer, {
+      this.turnstileWidgetId = window.turnstile.render(turnstileContainer, {
         sitekey: getTurnstileSiteKey(),
         callback: (token) => {
           this.turnstileToken = token;
@@ -54,17 +55,24 @@ export default class RegisterScreen extends Component {
     this.on(form, 'submit', async (e) => {
       e.preventDefault();
       try {
+        const turnstileToken = window.turnstile && this.turnstileWidgetId !== null
+          ? window.turnstile.getResponse(this.turnstileWidgetId) || this.turnstileToken
+          : this.turnstileToken;
         const res = await api.post('/api/auth/register', {
           name: form.name.value,
           email: form.email.value,
           password: form.password.value,
-          turnstileToken: this.turnstileToken,
+          turnstileToken,
         });
         if (res.success) {
           alert('Registration successful! Please check your email to verify.');
           window.location.hash = '/login';
         }
       } catch (err) {
+        if (window.turnstile && this.turnstileWidgetId !== null) {
+          window.turnstile.reset(this.turnstileWidgetId);
+          this.turnstileToken = '';
+        }
         alert(err.message || 'Registration failed');
       }
     });

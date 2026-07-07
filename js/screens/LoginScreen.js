@@ -33,9 +33,10 @@ export default class LoginScreen extends Component {
     const form = this.$('#login-form');
     const turnstileContainer = this.$('#login-turnstile');
     this.turnstileToken = '';
+    this.turnstileWidgetId = null;
 
     if (window.turnstile && turnstileContainer) {
-      window.turnstile.render(turnstileContainer, {
+      this.turnstileWidgetId = window.turnstile.render(turnstileContainer, {
         sitekey: getTurnstileSiteKey(),
         callback: (token) => {
           this.turnstileToken = token;
@@ -53,7 +54,9 @@ export default class LoginScreen extends Component {
       e.preventDefault();
       const email = form.email.value;
       const password = form.password.value;
-      const turnstileToken = this.turnstileToken;
+      const turnstileToken = window.turnstile && this.turnstileWidgetId !== null
+        ? window.turnstile.getResponse(this.turnstileWidgetId) || this.turnstileToken
+        : this.turnstileToken;
 
       try {
         const res = await api.post('/api/auth/login', { email, password, turnstileToken });
@@ -64,6 +67,10 @@ export default class LoginScreen extends Component {
           window.location.hash = '/dashboard';
         }
       } catch (err) {
+        if (window.turnstile && this.turnstileWidgetId !== null) {
+          window.turnstile.reset(this.turnstileWidgetId);
+          this.turnstileToken = '';
+        }
         alert(err.message || 'Login failed');
       }
     });
