@@ -28,4 +28,4 @@ services:
       - key: TURNSTILE_SECRET_KEY
         sync: false
       - key: FRONTEND_URL
-        value: https://hellenicdev.github.io/project-atlas
+        value: https://hellenicdev.eu/project-atlas

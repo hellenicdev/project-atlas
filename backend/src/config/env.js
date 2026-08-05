@@ -20,7 +20,7 @@ const env = {
   geminiApiKey: process.env.GEMINI_API_KEY,
   resendApiKey: process.env.RESEND_API_KEY,
   turnstileSecretKey: process.env.TURNSTILE_SECRET_KEY || null,
-  frontendUrl: process.env.FRONTEND_URL || (isProduction ? 'https://hellenicdev.github.io/project-atlas' : 'http://localhost:3000'),
+  frontendUrl: process.env.FRONTEND_URL || (isProduction ? 'https://hellenicdev.eu/project-atlas' : 'http://localhost:3000'),
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 900000,
     max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
