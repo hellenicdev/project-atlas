@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import env from '../config/env.js';
@@ -149,6 +149,10 @@ export const requestPasswordReset = async (email) => {
 };
 
 export const resetUserPassword = async (token, newPassword) => {
+  if (typeof token !== 'string') {
+    throw new AppError('Invalid or expired reset token', 400, 'AUTH_INVALID_TOKEN');
+  }
+
   const user = await User.findOne({
     resetPasswordToken: token,
     resetPasswordExpires: { $gt: new Date() },

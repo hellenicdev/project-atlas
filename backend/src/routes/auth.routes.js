@@ -39,7 +39,7 @@ router.post('/forgot-password', [
 ], validate, authController.forgotPassword);
 
 router.post('/reset-password', [
-  body('token').notEmpty().withMessage('Reset token is required'),
+  body('token').isString().isUUID().withMessage('Valid reset token is required'),
   body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 ], validate, authController.resetPassword);
 
