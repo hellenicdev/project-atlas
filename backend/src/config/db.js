@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import env from './env.js';
 import logger from '../utils/logger.js';
 
+mongoose.set('sanitizeFilter', true);
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(env.mongoUri);

@@ -21,6 +21,7 @@ import notificationRoutes from './routes/notification.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Middleware pipeline
 app.use(requestId);
@@ -32,10 +33,10 @@ app.use(cors({
   credentials: true,
 }));
 app.use(cookieParser());
-app.use(sanitizeInput);
-app.use(mongoSanitize());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(sanitizeInput);
+app.use(mongoSanitize());
 
 // Global rate limiter
 app.use(rateLimit({
