@@ -34,6 +34,9 @@ const start = async () => {
   });
 };
 
-start();
+start().catch((err) => {
+  logger.error(`Failed to start server: ${err?.message || err}`);
+  process.exit(1);
+});
 
 export { io, server };
