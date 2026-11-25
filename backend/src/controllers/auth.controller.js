@@ -49,7 +49,7 @@ export const resendVerification = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
   if (user && !user.isVerified) {
     const { sendVerificationEmail } = await import('../services/email.service.js');
-    const token = user.verificationToken || (await import('uuid')).v4();
+    const token = user.verificationToken || (await import('crypto')).randomUUID();
     if (!user.verificationToken) {
       user.verificationToken = token;
       await user.save();

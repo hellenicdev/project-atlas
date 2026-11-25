@@ -62,6 +62,11 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Atlas API is running' });
 });
 
+// Unknown API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
+});
+
 // Error handler
 app.use(errorHandler);
 
